@@ -1,7 +1,10 @@
-#Reamde for PHP local server
+# Reamde for PHP local server
 
-##[git for windows](https://gitforwindows.org/) ##[node](https://nodejs.org/en/)
-##Commands:
+## [git for windows](https://gitforwindows.org/)
+
+## [node](https://nodejs.org/en/)
+
+## Commands:
 
 ```
 npm i five-server
