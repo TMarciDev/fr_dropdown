@@ -33,18 +33,43 @@
 <head>
     <link rel="stylesheet" href="index.css">
 </head>
-<script>
-    var categories = JSON.parse('<?php echo json_encode($categories) ?>');
-</script>
 <body>
     <nav class="all-dropdown-container">
-        <?php for($i = 0; $i < 5; $i++ ) { ?>
-            <div class="row-container">
-                <div class="category"></div>
-            </div>
-            <div class="subcategory-container invisible"></div>
-            <div class= "vertical-divider"></div>
-        <?php } ?>
+    <?php foreach($categories as $cat) { ?>
+    <div class="row-container">
+        
+        <div class="category">
+            <?php if(strlen(htmlspecialchars($cat['action'])) > 0):?>
+                <a class="category-label cat-label-action" href="<?php echo htmlspecialchars($cat['action']);?>.php">
+            <?php else: ?>
+                <a class="category-label cat-label-action">
+            <?php endif ?>
+
+                <?php if(strlen(htmlspecialchars($cat['icon_img'])) > 0) { ?>
+                    <button class="cat-label-action"><img class="cat-label-action" src="../images/<?php echo htmlspecialchars($cat['icon_img']); ?>" /></button>
+                <?php } ?>
+                <button class="label-text cat-label-action"><?php echo htmlspecialchars($cat['category']); ?></button>
+            </a>
+            <button class="list-opener list-opener-button"><img class="list-opener list-opener-image" src="images/items.png"/></button>
+        </div>
+        <div class="subcategory-container invisible">
+            <?php foreach($items as $item) { ?>
+            <?php if(strcmp(strtolower(htmlspecialchars($item['category'])),
+                    strtolower(htmlspecialchars($cat['category']))) == 0) { ?>
+                <div class="subcategory subcat-item">
+                    <div class="subcat-item">
+                        <?php echo htmlspecialchars($item['label']); ?>
+                    </div>
+                    <?php if(strlen(htmlspecialchars($item['icon_img'])) > 0) { ?>
+                        <img class="subcat-item" src="images/<?php echo htmlspecialchars($item['icon_img']); ?>" />
+                    <?php } ?>
+                </div>
+            <?php } ?>
+            <?php } ?>
+        </div>
+    </div>
+    <div class= "vertical-divider"></div>
+    <?php } ?>
     </nav>
     <section class="page-content">
         <h1>Lorem ipsum dolor sit amet</h1>

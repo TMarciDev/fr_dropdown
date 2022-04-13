@@ -7,12 +7,12 @@
 ## Commands:
 
 1. Create directory
-2. Right-click: open with [Visual Studio code](https://code.visualstudio.com/)
-3. In vs-code top bar: terminal -> new terminal
+2. Open it with an ide you are using
+3. Open a terminal in your ide
 
 ## In the terminal:
 
-### First time git (to the directory you like (don't have to xampp dir)):
+### First time git:
 
 `git clone https://github.com/TMarciDev/fr_dropdown.git`
 
@@ -22,7 +22,7 @@
 
 ### Setting up local server quickli
 
-#### Start xampp mysql server (only that)
+#### Start xampp mysql and apache server
 
 #### In your directory you pulled the repository:
 
