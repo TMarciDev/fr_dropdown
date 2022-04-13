@@ -1,15 +1,16 @@
 const allDropdownContainer = document.querySelector('.all-dropdown-container');
 const allRows = document.querySelectorAll('.subcategory-container');
-//const content = document.querySelector('.page-content');
+const content = document.querySelector('.page-content');
+
+const rows = document.querySelectorAll('.row-container');
 
 var mainCategories = categories.filter(
 	(c) => c.layout_code == null && c.body_layout == null
 );
 var currentCategory = mainCategories.filter((c) => c.b_current == 1)[0];
+mainCategories.splice(mainCategories.indexOf(currentCategory));
 
 var mainObj = {};
-
-console.log(categories);
 
 const buildMainObj = (current, source) => {
 	var currentAll = [];
@@ -23,8 +24,16 @@ const buildMainObj = (current, source) => {
 		}
 	});
 
-	var add = currentAll.filter((c) => c.s_action == 'a0');
+	let add = [];
+	currentAll.map((c) => {
+		if (c.s_action == 'a0') {
+			add.push(c);
+			console.log(add);
+		}
+	});
+	console.log(add);
 	var addCurrent = add.filter((c) => c.b_current == 1)[0];
+	console.log(addCurrent);
 	add.splice(add.indexOf(addCurrent));
 
 	var edit = currentAll.filter((c) => c.s_action == 'e0');
@@ -51,7 +60,38 @@ const buildMainObj = (current, source) => {
 	};
 };
 
-console.log(buildMainObj(currentCategory, categories));
+mainObj = buildMainObj(currentCategory, categories);
+
+const createCol = (add, addCurrent, place, leader) => {
+	addRow = rows[place].querySelector('.category');
+	addRow.innerText = addCurrent.label_txt;
+
+	addRow.setAttribute('id', addCurrent.id);
+
+	if (add.length > 0) {
+		addRowSub = rows[place].querySelector('.subcategory-container');
+		add.map((e) => {
+			let subElement = document.createElement('div');
+			subElement.classList.add('subcategory', 'subcat-item');
+			subElement.setAttribute('id', e.id);
+
+			if (leader) {
+				subElement.classList.add('leader');
+			}
+			subElement.innerText = e.label_txt;
+			addRowSub.appendChild(subElement);
+		});
+	}
+};
+const createCols = () => {
+	createCol(mainObj.add, mainObj.addCurrent, 0, false);
+	createCol(mainObj.edit, mainObj.editCurrent, 1, false);
+	createCol(mainObj.tabs, mainObj.tabsCurrent, 2, false);
+	createCol(mainObj.list, mainObj.listCurrent, 3, false);
+	createCol(mainCategories, currentCategory, 4, true);
+};
+
+createCols();
 
 const closeAll = () => {
 	[...allRows].map((e) => {
@@ -61,17 +101,16 @@ const closeAll = () => {
 };
 
 allDropdownContainer.addEventListener('click', closeAll);
-//content.addEventListener('click', closeAll);
+content.addEventListener('click', closeAll);
 
 const handleRowClick = (element, event) => {
 	const buttonClasses = event.composedPath()[0].classList;
 
-	/*
-	if (buttonClasses.contains('list-opener')) {
+	if (buttonClasses.contains('category')) {
 		const subCatContainer = element.querySelector('.subcategory-container');
 		if (subCatContainer.classList.contains('invisible')) {
 			subCatContainer.classList.remove('invisible');
-			subCatContayiner.classList.add('open');
+			subCatContainer.classList.add('open');
 
 			subCatContainer.style.display = 'block';
 		} else {
@@ -81,6 +120,26 @@ const handleRowClick = (element, event) => {
 	} else {
 		closeAll();
 	}
+	//console.log(buttonClasses);
+	//console.log(event.composedPath());
+	//console.log(element);
+
+	if (buttonClasses.contains('subcat-item')) {
+		nextElem = event.composedPath()[0].innerText.trim();
+		id = event.composedPath()[0].id;
+		item = categories.filter((i) => i.id == id)[0];
+		if (buttonClasses.contains('leader')) {
+			//console.log(item);
+			mainCategories = categories.filter(
+				(c) => c.layout_code == null && c.body_layout == null
+			);
+			mainCategories.splice(mainCategories.indexOf(item));
+			mainObj = buildMainObj(item, categories);
+			//console.log(mainObj);
+			createCols();
+		}
+	}
+	/*
 	if (buttonClasses.contains('cat-label-action')) {
 		const button = element.querySelector('.label-text').innerText;
 		console.log('Category: ' + button);

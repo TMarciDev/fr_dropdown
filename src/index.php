@@ -41,8 +41,8 @@
         <?php for($i = 0; $i < 5; $i++ ) { ?>
             <div class="row-container">
                 <div class="category"></div>
+                <div class="subcategory-container invisible"></div>
             </div>
-            <div class="subcategory-container invisible"></div>
             <div class= "vertical-divider"></div>
         <?php } ?>
     </nav>
