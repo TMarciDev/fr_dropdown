@@ -1,4 +1,8 @@
-`npm i five-server`
-`npm i five-server@latest`
+git for windows
+npm for windows
 
-`five-server`
+`npm i five-server
+
+npm i five-server@latest
+
+five-server`
