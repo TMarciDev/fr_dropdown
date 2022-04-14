@@ -137,8 +137,17 @@ const handleRowClick = (element, event) => {
 			mainObj = buildMainObj(item, categories);
 			createCols();
 		} else {
-			console.log(item);
-			console.log(element.querySelectorAll('.subcat-item'));
+			const cat = element.querySelector('.category');
+			const sub = document.getElementById(id);
+			const temp = { innerText: '', id: 0 };
+			temp.innerText = cat.innerText;
+			temp.id = cat.id;
+
+			cat.innerText = sub.innerText;
+			cat.setAttribute('id', sub.id);
+
+			sub.innerText = temp.innerText;
+			sub.setAttribute('id', temp.id);
 		}
 	}
 	/*
