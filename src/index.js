@@ -8,7 +8,7 @@ var mainCategories = categories.filter(
 	(c) => c.layout_code == null && c.body_layout == null
 );
 var currentCategory = mainCategories.filter((c) => c.b_current == 1)[0];
-mainCategories.splice(mainCategories.indexOf(currentCategory));
+mainCategories = mainCategories.filter((c) => c != currentCategory);
 
 var mainObj = {};
 
@@ -24,29 +24,21 @@ const buildMainObj = (current, source) => {
 		}
 	});
 
-	let add = [];
-	currentAll.map((c) => {
-		if (c.s_action == 'a0') {
-			add.push(c);
-			console.log(add);
-		}
-	});
-	console.log(add);
+	var add = currentAll.filter((c) => c.s_action == 'a0');
 	var addCurrent = add.filter((c) => c.b_current == 1)[0];
-	console.log(addCurrent);
-	add.splice(add.indexOf(addCurrent));
+	add = add.filter((c) => c != addCurrent);
 
 	var edit = currentAll.filter((c) => c.s_action == 'e0');
 	var editCurrent = edit.filter((c) => c.b_current == 1)[0];
-	edit.splice(edit.indexOf(editCurrent));
+	edit = edit.filter((c) => c != editCurrent);
 
 	var list = currentAll.filter((c) => c.s_action == 'l0');
 	var listCurrent = list.filter((c) => c.b_current == 1)[0];
-	list.splice(list.indexOf(listCurrent));
+	list = list.filter((c) => c != listCurrent);
 
 	var tabs = currentAll.filter((c) => c.s_action == 't0');
 	var tabsCurrent = tabs.filter((c) => c.b_current == 1)[0];
-	tabs.splice(tabs.indexOf(tabsCurrent));
+	tabs = tabs.filter((c) => c != tabsCurrent);
 
 	return {
 		add: add,
@@ -83,7 +75,15 @@ const createCol = (add, addCurrent, place, leader) => {
 		});
 	}
 };
+
+const purgeSubCat = () => {
+	document.querySelectorAll('.subcat-item').forEach((cat) => {
+		cat.remove();
+	});
+};
+
 const createCols = () => {
+	purgeSubCat();
 	createCol(mainObj.add, mainObj.addCurrent, 0, false);
 	createCol(mainObj.edit, mainObj.editCurrent, 1, false);
 	createCol(mainObj.tabs, mainObj.tabsCurrent, 2, false);
@@ -129,14 +129,16 @@ const handleRowClick = (element, event) => {
 		id = event.composedPath()[0].id;
 		item = categories.filter((i) => i.id == id)[0];
 		if (buttonClasses.contains('leader')) {
-			//console.log(item);
 			mainCategories = categories.filter(
 				(c) => c.layout_code == null && c.body_layout == null
 			);
-			mainCategories.splice(mainCategories.indexOf(item));
+			currentCategory = item;
+			mainCategories = mainCategories.filter((c) => c != currentCategory);
 			mainObj = buildMainObj(item, categories);
-			//console.log(mainObj);
 			createCols();
+		} else {
+			console.log(item);
+			console.log(element.querySelectorAll('.subcat-item'));
 		}
 	}
 	/*
